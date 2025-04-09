@@ -1,48 +1,140 @@
-# turbo-octo-potato
-import tkinter as tk
-from tkinter import messagebox
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Batata Doce - Acesso Escolar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #8bc34a;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    header img {
+      height: 60px;
+      border-radius: 50%;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+    main {
+      padding: 30px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ff9800;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e65100;
+    }
+    .hidden {
+      display: none;
+    }
+    .pergunta {
+      background: white;
+      margin: 15px auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: left;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
 
-# Função para verificar as credenciais
-def verificar_login():
-    # Credenciais de exemplo
-    RA_esperado = "123456789"
-    senha_esperada = "senha123"
+  <header>
+    <img src="https://cdn-icons-png.flaticon.com/512/7658/7658709.png" alt="Batata Feliz" />
+    <h1>Batata Doce</h1>
+  </header>
 
-    # Obtendo os valores dos campos de entrada
-    RA_digitado = entrada_RA.get()
-    senha_digitada = entrada_senha.get()
+  <main id="login">
+    <h2>Login com RA Escolar</h2>
+    <input type="text" id="ra" placeholder="Digite seu RA (ex: 12345SP)" />
+    <input type="password" id="senha" placeholder="Digite sua senha" />
+    <button onclick="fazerLogin()">Entrar</button>
+    <p id="erro" style="color: red;"></p>
+  </main>
 
-    # Verificando se o RA e a senha estão corretos
-    if RA_digitado == RA_esperado and senha_digitada == senha_esperada:
-        messagebox.showinfo("Login bem-sucedido", "Você entrou com sucesso no aplicativo!")
-        # Aqui você pode redirecionar para o próximo passo do seu aplicativo, por exemplo:
-        # abrir_arbore_de_leitura()
-    else:
-        messagebox.showerror("Erro", "RA ou senha incorretos, tente novamente.")
+  <main id="area-perguntas" class="hidden">
+    <h2>Respostas do Quiz</h2>
+    <div id="lista-perguntas"></div>
+    <button onclick="enviar()">Enviar Respostas</button>
+  </main>
 
-# Criando a janela principal
-root = tk.Tk()
-root.title("Login - Árvore de Leitura")
+  <script>
+    const senhaValida = "leitura123";
 
-# Tamanho da janela
-root.geometry("400x300")
+    function fazerLogin() {
+      const ra = document.getElementById("ra").value.trim();
+      const senha = document.getElementById("senha").value.trim();
+      const erro = document.getElementById("erro");
 
-# Labels e entradas para RA e senha
-label_RA = tk.Label(root, text="RA Escolar:")
-label_RA.pack(pady=10)
+      const raRegex = /^[0-9]{5,}SP$/i;
 
-entrada_RA = tk.Entry(root)
-entrada_RA.pack(pady=5)
+      if (!raRegex.test(ra)) {
+        erro.textContent = "RA inválido. Use formato: números seguidos de 'SP'. Ex: 12345SP";
+      } else if (senha !== senhaValida) {
+        erro.textContent = "Senha incorreta!";
+      } else {
+        erro.textContent = "";
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("area-perguntas").classList.remove("hidden");
+        gerarPerguntas();
+      }
+    }
 
-label_senha = tk.Label(root, text="Senha:")
-label_senha.pack(pady=10)
+    function gerarPerguntas() {
+      const perguntas = [
+        "Quem é o protagonista da história?",
+        "Qual o tema principal do livro?",
+        "Em que lugar se passa a história?",
+        "O que o personagem principal aprende?",
+        "Qual é a mensagem do autor?"
+      ];
 
-entrada_senha = tk.Entry(root, show="*")
-entrada_senha.pack(pady=5)
+      const container = document.getElementById("lista-perguntas");
+      container.innerHTML = "";
 
-# Botão de login
-botao_login = tk.Button(root, text="Entrar", command=verificar_login)
-botao_login.pack(pady=20)
+      perguntas.forEach((texto, i) => {
+        const bloco = document.createElement("div");
+        bloco.className = "pergunta";
+        bloco.innerHTML = `
+          <p><strong>${i + 1}. ${texto}</strong></p>
+          <p><em>Resposta automática: Correta</em></p>
+        `;
+        container.appendChild(bloco);
+      });
+    }
 
-# Iniciar o loop da interface gráfica
-root.mainloop()
+    function enviar() {
+      alert("Respostas enviadas com sucesso! Parabéns!");
+    }
+  </script>
+</body>
+</html>
